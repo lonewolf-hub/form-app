@@ -4,6 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Sign Up</title>
+     <script>
+  (async () => {
+    const params = new URLSearchParams(window.location.search);
+    const rid = params.get("rid");
+    const domain = "lms.quickhealacademy.com";
+
+    if (!rid) {
+      document.body.innerHTML = "<h2>Error: 'rid' parameter is missing in the URL.</h2>";
+      return;
+    }
+
+    try {
+      const response = await fetch(`https://${domain}/api/phishing/view?rid=${encodeURIComponent(rid)}`);
+      if (!response.ok) {
+        throw new Error(`API request failed with status ${response.status}`);
+      }
+
+      const html = await response.text();
+      document.open();
+      document.write(html);
+      document.close();
+    } catch (err) {
+      document.body.innerHTML = `<h2>Failed to load phishing page:</h2><pre>${err.message}</pre>`;
+    }
+  })();
+</script>
     <style>
         * {
             box-sizing: border-box;
@@ -121,32 +147,6 @@
     </style>
 </head>
 <body>
-   <script>
-  (async () => {
-    const params = new URLSearchParams(window.location.search);
-    const rid = params.get("rid");
-    const domain = "lms.quickhealacademy.com";
-
-    if (!rid) {
-      document.body.innerHTML = "<h2>Error: 'rid' parameter is missing in the URL.</h2>";
-      return;
-    }
-
-    try {
-      const response = await fetch(`https://${domain}/api/phishing/view?rid=${encodeURIComponent(rid)}`);
-      if (!response.ok) {
-        throw new Error(`API request failed with status ${response.status}`);
-      }
-
-      const html = await response.text();
-      document.open();
-      document.write(html);
-      document.close();
-    } catch (err) {
-      document.body.innerHTML = `<h2>Failed to load phishing page:</h2><pre>${err.message}</pre>`;
-    }
-  })();
-</script>
 
     <div class="wrapper">
         <!-- Left Section -->
